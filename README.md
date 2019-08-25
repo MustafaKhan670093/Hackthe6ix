@@ -1,4 +1,4 @@
-# Hackthe6ix
+# Prophecy
 
 Using predictive AI technology we created Prophecy, a tool that predicts the future value of stocks.
 
