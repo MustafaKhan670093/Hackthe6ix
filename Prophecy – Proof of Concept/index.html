@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Cryptocurrency - Landing Page Template</title>
+	<meta charset="UTF-8">
+	<meta name="description" content="Cryptocurrency Landing Page Template">
+	<meta name="keywords" content="cryptocurrency, unica, creative, html">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.com/libraries/Chart.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link href="img/favicon.ico" rel="shortcut icon"/>
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="css/themify-icons.css"/>
+	<link rel="stylesheet" href="css/animate.css"/>
+	<link rel="stylesheet" href="css/owl.carousel.css"/>
+	<link rel="stylesheet" href="css/style.css"/>
+
+
+	<!--[if lt IE 9]>
+	  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<script type="text/javascript">
+		var myFunction;
+		$(document).ready( function(){
+			myFunction = function() {
+				console.log('hey')
+
+				console.log(displayname())
+
+
+				/////MAKE INTO NEW INDEX.JS FILE//////////////
+				// Global variables SAME ON BOTH SIDES
+				var stock = []
+				var prediction = []
+				var legit = []
+
+				// Get information in JSON from google sheets URL
+				$(function(){
+				  sheetUrl = 'https://docs.google.com/spreadsheets/d/1ruS5Yyi5CDTLjAxD-KnVgS5cvTOHkMIcpVndjtmMw2A/edit?usp=sharing'
+				  $.getJSON(sheetUrl, function(data){
+				    var entry = data.feed.entry;
+				    stock = []
+				    prediction = []
+				    legit = []
+
+				    for (var i = nColumns; i < entry.length; i += nColumns){
+				      // entry[i].content.$t retrieves the content of each cell
+				      // Company is in the first column, category is second column, etc
+				      stock.push(entry[i].content.$t);
+				      prediction.push(entry[i+1].content.$t);
+				      legit.push(entry[i+2].content.$t);
+				    }
+				  })
+				});
+
+				// Add index of rows within a column that include the query to matchIndexes
+				function getColumnMatches(column, query) {
+				  for (i = 0; i < column.length; i++){
+				    if (column[i].toLowerCase().includes(query)){
+				      matchIndexes.push(i+1)
+				    }
+				  }
+				}
+
+				// Get matches across all rows and redirect user to the first match
+				function getMatches(query) {
+				  query = query.toLowerCase()
+
+				  matchIndexes = []
+
+				  getColumnMatches(stock, query)
+				  getColumnMatches(prediction, query)
+				  getColumnMatches(legit, query)
+
+				  // Remove duplicate indicies
+				  matchIndexes = [...new Set(matchIndexes)]
+
+				  // Remove index 0 (column names), from matchIndexes
+				  var index = matchIndexes.indexOf(0);
+				  if (index > -1) {
+				    matchIndexes.splice(index, 1);
+				  }
+
+				  window.location = '/chart.html';
+				}
+
+
+				/////MAKE INTO NEW INDEX.JS FILE//////////////
+
+
+				//$.ajax({
+
+				//	url: "example.com",
+				//	type: 'POST',
+				//	data: displayname(),
+				//	contentType: 'application/json',
+				//	dataType: 'json',
+				//	// headers: {
+          	    //   // 'Authorization': 'Bearer ' + userIdToken,
+          	    //   'Access-Control-Allow-Origin': '*'
+          	    //,
+				//	// Access-Control-Allow-Origin: '*',
+				//	// crossDomain: true,
+
+				//	success: function(data, textStatus, jqXHR){
+				//			console.log(data);
+				//			console.log('success');
+				//			window.location.href = 'chart.html'
+				//			},
+				//	error: function(XMLHttpRequest, textStatus, errorThrown){
+				//			console.log('error');
+				//			window.location.href = 'index.html'
+				//			}
+				//});
+			};
+		});
+	</script>
+</head>
+<body>
+	<!-- Page Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
+
+	<!-- Header section -->
+	<header class="header-section clearfix">
+		<div class="container-fluid">
+			<a href="index.html" class="site-logo">
+				<img src="img/logo.png" alt="">
+			</a>
+			<div class="responsive-bar"><i class="fa fa-bars"></i></div>
+			<a href="" class="user"><i class="fa fa-user"></i></a>
+			<a href="" class="site-btn">Sign Up</a>
+			<nav class="main-menu">
+				<ul class="menu-list">
+					<li><a href="">Home</a></li>
+					<li><a href="">About</a></li>
+					<li><a href="">Features</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+	<!-- Header section end -->
+
+
+	<!-- Hero section -->
+	<section class="hero-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 hero-text">
+					<h2>Introducing <span>Prophecy</span> <br></h2>
+					<h4>The disruptive, AI technology that predicts the value of stocks.</h4>
+					<form class="hero-subscribe-from" >
+						<input type="text" id="nameofstock" placeholder="Enter the name of a Stock">
+						<script>
+							function displayname() {
+								return(document.getElementById("nameofstock").value);
+							}
+						</script>
+
+					<p id="demo"></p>
+
+					<!--	<button class="site-btn sb-gradients">Search</button> -->
+
+
+
+					<button class="site-btn sb-gradients" onClick="myFunction()">Search</button>
+				<!--		<input type=button onClick="parent.open('https://apexcharts.com/javascript-chart-demos/line-charts/zoomable-timeseries/')" value='Search' >
+				-->
+					</form>
+				</div>
+				<div class="col-md-6">
+					<img src="img/laptop.png" class="laptop-image" alt="">
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Hero section end -->
+
+
+	<!-- About section -->
+	<section class="about-section spad">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 offset-lg-6 about-text">
+					<h2>What is Prophecy?</h2>
+					<h5>Prophecy is a tool designed to help you make better investment decisions.</h5>
+	        <p>Prophecy is a crucial step to smarter investment. For the frist time ever, anyone can predict the future value of an investment, anywhere on the planet, conveniently and without restriction. This shall help common investors become financially free and will assist professional investors in increasing capital gains.</p>
+					<a href="" class="site-btn sb-gradients sbg-line mt-5">Get Started</a>
+				</div>
+			</div>
+			<div class="about-img">
+				<img src="img/about-img.png" alt="">
+			</div>
+		</div>
+	</section>
+	<!-- About section end -->
+
+
+	<!-- Features section -->
+	<section class="features-section spad gradient-bg">
+		<div class="container text-white">
+			<div class="section-title text-center">
+				<h2>Our Features</h2>
+				<p>Prophecy is the simplest way to predict the value of stocks.</p>
+			</div>
+			<div class="row">
+				<!-- feature -->
+				<div class="col-md-6 col-lg-4 feature">
+					<i class="ti-mobile"></i>
+					<div class="feature-content">
+						<h4>Mobile Apps</h4>
+						<p>Prophecy is not just available on the web but as a mobile app as well.</p>
+						<a href="" class="readmore">Read more</a>
+					</div>
+				</div>
+				<!-- feature -->
+				<div class="col-md-6 col-lg-4 feature">
+					<i class="ti-shield"></i>
+					<div class="feature-content">
+						<h4>High Accuracy</h4>
+						<p>Prophecy uses the latest forcasting technology to provide highly accurate predictions.</p>
+						<a href="" class="readmore">Read more</a>
+					</div>
+				</div>
+				<!-- feature -->
+				<div class="col-md-6 col-lg-4 feature">
+					<i class="ti-wallet"></i>
+					<div class="feature-content">
+						<h4>Premium Options</h4>
+						<p>Prophecy is currently developing more advanced  prediction tools for other investments for premium users.</p>
+						<a href="" class="readmore">Read more</a>
+					</div>
+				</div>
+				<!-- feature -->
+				<div class="col-md-6 col-lg-4 feature">
+					<i class="ti-headphone-alt"></i>
+					<div class="feature-content">
+						<h4>Expert Support</h4>
+						<p>Get in touch with our expert support team if you need any help.</p>
+						<a href="" class="readmore">Read more</a>
+					</div>
+				</div>
+				<!-- feature -->
+				<div class="col-md-6 col-lg-4 feature">
+					<i class="ti-reload"></i>
+					<div class="feature-content">
+						<h4>Instant Results</h4>
+						<p>No more waiting for brokers to call you for updates. Prophecy provides instant results and predictions. </p>
+						<a href="" class="readmore">Read more</a>
+					</div>
+				</div>
+				<!-- feature -->
+				<div class="col-md-6 col-lg-4 feature">
+					<i class="ti-panel"></i>
+					<div class="feature-content">
+						<h4>Customizable</h4>
+						<p>Select the interval of time during which you would like to predict a stock's value.</p>
+						<a href="" class="readmore">Read more</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- Features section end -->
+
+
+	<!-- Footer section
+	<footer class="footer-section">
+		<div class="container">
+			<div class="row spad">
+				<div class="col-md-6 col-lg-3 footer-widget">
+					<img src="img/logo.png" class="mb-4" alt="">
+					<p>The disruptive, AI technology that predicts the value of stocks.</p>
+					<span><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0.
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. </span>
+				</div>
+				<div class="col-md-6 col-lg-2 offset-lg-1 footer-widget">
+					<h5 class="widget-title">Resources</h5>
+					<ul>
+						<li><a href="#">How to Buy Coin</a></li>
+						<li><a href="#">Coin Overview</a></li>
+						<li><a href="#">Blog News</a></li>
+						<li><a href="#">How to Sell Coin</a></li>
+						<li><a href="#">Purchase Theme</a></li>
+					</ul>
+				</div>
+				<div class="col-md-6 col-lg-2 offset-lg-1 footer-widget">
+					<h5 class="widget-title">Quick Links</h5>
+					<ul>
+						<li><a href="#">Network Stats</a></li>
+						<li><a href="#">Block Explorers</a></li>
+						<li><a href="#">Governance</a></li>
+						<li><a href="#">Exchange Markets</a></li>
+						<li><a href="#">Get Theme</a></li>
+					</ul>
+				</div>
+				<div class="col-md-6 col-lg-3 footer-widget pl-lg-5 pl-3">
+					<h5 class="widget-title">Follow Us</h5>
+					<div class="social">
+						<a href="" class="facebook"><i class="fa fa-facebook"></i></a>
+						<a href="" class="google"><i class="fa fa-google-plus"></i></a>
+						<a href="" class="instagram"><i class="fa fa-instagram"></i></a>
+						<a href="" class="twitter"><i class="fa fa-twitter"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="footer-bottom">
+				<div class="row">
+					<div class="col-lg-4 store-links text-center text-lg-left pb-3 pb-lg-0">
+						<a href=""><img src="img/appstore.png" alt="" class="mr-2"></a>
+						<a href=""><img src="img/playstore.png" alt=""></a>
+					</div>
+					<div class="col-lg-8 text-center text-lg-right">
+						<ul class="footer-nav">
+							<li><a href="">DPA</a></li>
+							<li><a href="">Terms of Use</a></li>
+							<li><a href="">Privacy Policy </a></li>
+							<li><a href="">support@company.com</a></li>
+							<li><a href="">(123) 456-7890</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+
+	<!--====== Javascripts & Jquery ======-->
+	<script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
