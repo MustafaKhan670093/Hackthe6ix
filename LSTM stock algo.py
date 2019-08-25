@@ -15,20 +15,6 @@ from yahoo_fin import stock_info as si
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 import json
-from flask import Flask, jsonify, request
-import flask_cors
-
-
-
-
-from flask import Flask
-app = Flask(__name__)
-@app.route("/output")
-app.run()
-app.run("0.0.0.0", "5010")
-
-
-
 
 def output():
     scaler = MinMaxScaler(feature_range=(0, 1))
